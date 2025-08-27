@@ -22,4 +22,4 @@ RUN ./mvnw package -DskipTests
 EXPOSE 8081
 
 # Run the jar file
-CMD ["java", "-jar", "target\employee-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/app/target/employee-0.0.1-SNAPSHOT.jar"]
