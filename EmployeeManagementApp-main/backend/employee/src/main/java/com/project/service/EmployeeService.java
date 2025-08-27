@@ -1,0 +1,55 @@
+package com.project.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.project.entity.Employee;
+import com.project.repository.EmployeeRepo;
+
+import jakarta.persistence.EntityNotFoundException;
+
+
+@Service
+public class EmployeeService {
+
+	@Autowired
+	private EmployeeRepo employeeRepo;
+	
+	public Employee createEmployee(Employee employee) {
+		return employeeRepo.save(employee);
+	}
+	
+	public List<Employee> getAllEmployee(){
+		return employeeRepo.findAll();
+	}
+	
+	public void deleteEmployeeById(Long id) {
+		if(!employeeRepo.existsById(id)) {
+			throw new EntityNotFoundException("Employee by the Id " + id + " not found");
+		}
+		employeeRepo.deleteById(id);
+	}
+	
+	public Employee getEmployeeById(Long id) {
+		return employeeRepo.findById(id).orElse(null);
+	}
+	
+	public Employee updateEmployee(Long id, Employee employee) {
+		Optional<Employee> optional = employeeRepo.findById(id);
+		if(optional.isPresent()) {
+			Employee existingEmployee = optional.get();
+			
+			existingEmployee.setName(employee.getName());
+			existingEmployee.setEmail(employee.getEmail());
+			existingEmployee.setPhone(employee.getPhone());
+			existingEmployee.setDepartment(employee.getDepartment());
+			
+			return employeeRepo.save(existingEmployee);
+		}
+		
+		return null;
+	}
+}
